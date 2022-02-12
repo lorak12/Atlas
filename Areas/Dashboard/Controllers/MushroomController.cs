@@ -31,6 +31,7 @@ namespace Atlas.Areas.Dashboard.Controllers
             {
                 MushroomsListVM oneName = new();  //tworzę nowy obiekt typu MushroomListVM, obiekt o nazwie oneName
                 oneName.Name = item.Name; //do obiektu oneName do pola Name wpisuję wartość pola Name z obiektu item
+                oneName.ID = item.ID.ToString();
                 nameOnly.Add(oneName);  //dodaję do listy nameOnly obiekt 'oneName' utworzony 2 linijki wcześniej
             }
 
