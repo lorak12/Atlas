@@ -38,10 +38,15 @@ namespace Atlas.Areas.Dashboard.Controllers
             return View(nameOnly);  // widok listy grzybów
         }
 
-        [Route("/Pulpit/Grzyby/Usun")]
+        [Route("/Pulpit/Grzyby/Usun/{id}")]
         // usuwanie z bazy
-        public IActionResult Delete()
+        public IActionResult Delete(string id)
         {
+            Mushroom mushroom = _context.Mushrooms.FirstOrDefault(x => x.ID == Guid.Parse(id)); // wybierz z tabeli Mushrooms pierwszego napotkanego grzyba o ID takim jak podane w akcji
+
+            _context.Mushrooms.Remove(mushroom);
+            _context.SaveChanges();
+
             return View(); // potwierdzenie usunięcia z bazy
         }
 
@@ -80,10 +85,25 @@ namespace Atlas.Areas.Dashboard.Controllers
 
 
 
-        [Route("/Pulpit/Grzyby/Edycja")]
+        [Route("/Pulpit/Grzyby/Edycja/{id}")]
         // aktualizacja wpisu, w bazie
-        public IActionResult Update()
+        public IActionResult Update(string id)
         {
+            Mushroom mushroom = _context.Mushrooms.FirstOrDefault(x => x.ID == Guid.Parse(id));
+
+            MushroomVM model = new()
+            {
+                Description = mushroom.Description,
+                Edibility = mushroom.Edibility,
+                Family = mushroom.Family,
+                Genre = mushroom.Genre,
+                Kind = mushroom.Kind,
+                LatinName = mushroom.LatinName,
+                Name = mushroom.Name,
+                Occurence = mushroom.Occurence
+            };
+
+            
             return View(); // wypełniony formularz z danymi wybranego grzyba
         }
     }
