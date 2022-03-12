@@ -27,7 +27,7 @@ namespace Atlas.Areas.Dashboard.Controllers
 
             List<MushroomsListVM> nameOnly = new();  //utworzenie nowej listy PUSTEJ
 
-            foreach(var item in allMushrooms)
+            foreach (var item in allMushrooms)
             {
                 MushroomsListVM oneName = new();  //tworzę nowy obiekt typu MushroomListVM, obiekt o nazwie oneName
                 oneName.Name = item.Name; //do obiektu oneName do pola Name wpisuję wartość pola Name z obiektu item
@@ -100,11 +100,34 @@ namespace Atlas.Areas.Dashboard.Controllers
                 Kind = mushroom.Kind,
                 LatinName = mushroom.LatinName,
                 Name = mushroom.Name,
-                Occurence = mushroom.Occurence
+                Occurence = mushroom.Occurence,
+                ID = id
             };
 
-            
-            return View(); // wypełniony formularz z danymi wybranego grzyba
+
+            return View(model); // wypełniony formularz z danymi wybranego grzyba
+        }
+
+        [HttpPost]
+        [Route("/Pulpit/Grzyby/Edycja")]
+        public IActionResult Update(MushroomVM model)
+        {
+
+            Mushroom mushroom = _context.Mushrooms.FirstOrDefault(x => x.ID == Guid.Parse(model.ID));
+
+            mushroom.Family = model.Family;
+            mushroom.Description = model.Description;
+            mushroom.Edibility = model.Edibility;
+            mushroom.Genre = model.Genre;
+            mushroom.Kind = model.Kind;
+            mushroom.Name = model.Name;
+            mushroom.LatinName = model.LatinName;
+            mushroom.Occurence = model.Occurence;
+
+            _context.Mushrooms.Update(mushroom);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
